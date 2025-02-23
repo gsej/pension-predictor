@@ -37,13 +37,33 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment: production
+ 
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: api
-        path: ./publish
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: api
+          path: ./publish
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5F0AD3C910A24838BAAA8289FE74FF08 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_43A05CF9667A454F8732DB9A8B6ACC6E }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_64CFA409969D4B178E9BCF5B8A87020D }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'gsej-pension-predictor'
+          slot-name: 'Production'
+          package: .
+
 
     # - name: Login to Azure
     #   uses: azure/login@v1
