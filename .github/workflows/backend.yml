@@ -8,7 +8,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
@@ -16,12 +16,12 @@ jobs:
         dotnet-version: '8.0.x'
 
     - name: Restore dependencies
-     
+      working-directory: code/dotnet/Api
       run: dotnet restore
 
     - name: Build
       working-directory: code/dotnet/Api
       run: dotnet build --configuration Release --no-restore Api.csproj
-
+ 
     # - name: Run tests
     #   run: dotnet test --no-restore --verbosity normal
