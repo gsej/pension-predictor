@@ -3,6 +3,26 @@ on:
   workflow_dispatch:
   
 jobs:
+
+  infrastructure:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        
+      - name: Terraform Init
+        working-directory: ./infrastructure
+        run: terraform init
+        
+      # - name: Terraform Plan
+      #   working-directory: ./infrastructure
+      #   run: terraform plan
+
+
   build:
     runs-on: ubuntu-latest   
 
